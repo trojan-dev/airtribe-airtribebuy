@@ -1,8 +1,8 @@
-# airtribe-airtribebuy
-AirtribeBuy React Frontend Code
+# React + Vite
 
-# How to use this repo
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-The ``main`` branch has the final code solution. It is protected, so you cannot push anything on top of it. Please clone and look at the final code from this branch.
+Currently, two official plugins are available:
 
-To create your own version, simply create a branch from the ``main`` branch by the naming convention airtribebuy-``yourname``
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
