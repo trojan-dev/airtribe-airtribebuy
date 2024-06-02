@@ -10,61 +10,51 @@ import {
   Rating,
   Card,
 } from "@mantine/core";
-import { useParams, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams, useNavigate, useOutletContext } from "react-router-dom";
+import { addItemToCart, updateItemInCart } from "../store/cartSlice";
 import {
   useGetProductDetails,
   useGetAllProductsInCategory,
 } from "../services/useProductServices";
 import { CATEGORY } from "../constants/category";
+
 import { notifications } from "@mantine/notifications";
 
 const ProductDetailsPage = () => {
+  const context = useOutletContext();
+  console.log(context);
+  const cart = useSelector((state) => state.cart.cartItems);
+  console.log(cart);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
   const [product, loading] = useGetProductDetails(params.productId);
   const [products] = useGetAllProductsInCategory(product.category);
 
-  const createUserCart = () => {
-    localStorage.setItem("airtribebuy-cart", JSON.stringify([]));
-  };
-
-  const getUserCart = () => {
-    return JSON.parse(localStorage.getItem("airtribebuy-cart"));
-  };
-
-  const isUserCartPresent = () => {
-    const userCart = localStorage.getItem("airtribebuy-cart");
-    return userCart ? true : false;
-  };
-
   const handleAddToCart = (product) => {
-    // Case when cart is not present and it is being created the first time
-    if (!isUserCartPresent()) {
-      createUserCart();
-      const userCart = getUserCart();
-      userCart.push({ product: product, quantity: 1 });
-      localStorage.setItem("airtribebuy-cart", JSON.stringify(userCart));
-      notifications.show({
-        title: "Product added to cart!",
-      });
-      return true;
+    if (!localStorage.getItem("airtribebuy-cart")) {
+      context.openModal();
+      return false;
     }
-
-    const userCart = getUserCart();
-    const productIndexInTheCart = userCart.findIndex(
-      (p) => p.product.id === product.id
+    const isItemAlreadyPresentInCart = cart.findIndex(
+      (item) => item.product.id === product.id
     );
-
-    if (productIndexInTheCart >= 0) {
-      userCart[productIndexInTheCart].quantity += 1;
-    } else {
-      userCart.push({ product: product, quantity: 1 });
+    if (isItemAlreadyPresentInCart !== -1) {
+      dispatch(
+        updateItemInCart({
+          product: product,
+          quantity: cart[isItemAlreadyPresentInCart].quantity + 1,
+        })
+      );
+      return null;
     }
-
-    localStorage.setItem("airtribebuy-cart", JSON.stringify(userCart));
-    notifications.show({
-      title: "Product added to cart!",
-    });
+    dispatch(
+      addItemToCart({
+        product: product,
+        quantity: 1,
+      })
+    );
   };
 
   if (loading) {

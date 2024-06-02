@@ -1,8 +1,9 @@
 import { Text, Box, Stack, Flex, Card, Image, SimpleGrid } from "@mantine/core";
+import { useSelector } from "react-redux";
 
 const CartPage = () => {
-  const userCart = JSON.parse(localStorage.getItem("airtribebuy-cart"));
-  if (!userCart) {
+  const cart = useSelector((state) => state.cart.cartItems);
+  if (!cart) {
     return <p>Loading cart...</p>;
   }
   return (
@@ -11,7 +12,7 @@ const CartPage = () => {
         My Cart
       </Text>
       <SimpleGrid cols={3}>
-        {userCart?.map((cartItem) => (
+        {cart?.map((cartItem) => (
           <Card key={cartItem.product.id} p={20} shadow="md" radius="sm">
             <Flex gap={20}>
               <Image

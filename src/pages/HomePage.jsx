@@ -1,4 +1,12 @@
-import { Box, SimpleGrid, Image, Card, Flex, Text } from "@mantine/core";
+import {
+  Box,
+  SimpleGrid,
+  Image,
+  Card,
+  Flex,
+  Text,
+  Button,
+} from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { useGetAllProducts } from "../services/useProductServices";
 
@@ -44,6 +52,14 @@ const HomePage = () => {
                 <Text fz={20} fw={800}>
                   ₹{Number(product.price).toFixed(2)}
                 </Text>
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    alert("I am clicked");
+                  }}
+                >
+                  Add To Wishlist
+                </Button>
               </Flex>
             </Card>
           );
